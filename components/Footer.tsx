@@ -13,14 +13,14 @@ export const Footer = ({ hideFeedback }: { hideFeedback?: boolean }) => {
       <p className="leading-7 [&:not(:first-child)]:mt-6 text-center">
         Created By&nbsp;
         <Link
-          href="https://github.com/DannyDorito"
+          href="https://github.com/JohnAllis0n"
           target="_blank"
           hrefLang="en-gb"
           rel="noopener noreferrer"
           className="underline"
-          aria-label="Danny Dorito's GitHub"
+          aria-label="John Allis0n's GitHub"
         >
-          Danny_Dorito
+          JohnAllis0n
         </Link>
         .&nbsp;Using&nbsp;
         <Link
