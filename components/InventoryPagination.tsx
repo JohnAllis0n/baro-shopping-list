@@ -8,8 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BaseItem } from "@/types/BaseItem";
-import { Table } from "@tanstack/react-table";
+import { tableDef } from "./ColumnDef";
 import {
   ChevronsLeft,
   ChevronLeft,
@@ -17,7 +16,7 @@ import {
   ChevronsRight,
 } from "lucide-react";
 
-const InventoryPagination = ({ table }: { table: Table<BaseItem> }) => (
+const InventoryPagination = ({ table }: { table: tableDef }) => (
   <div className="space-x-3 flex items-center">
     <Button
       variant="outline"
@@ -42,7 +41,7 @@ const InventoryPagination = ({ table }: { table: Table<BaseItem> }) => (
     <Select onValueChange={(value) => table.setPageSize(Number(value))}>
       <SelectTrigger className="w-30">
         <SelectValue
-          placeholder={`Show ${table.getState().pagination.pageSize}`}
+          placeholder={`Show ${table.state.pagination.pageSize}`}
           aria-label="Select Page Size"
         />
       </SelectTrigger>

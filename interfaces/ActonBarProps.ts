@@ -1,6 +1,6 @@
 import { tableDef } from "@/components/ColumnDef";
 import { InventoryType } from "@/enums/Type";
-import { ColumnFiltersState } from "@tanstack/react-table";
+import { ColumnFiltersState, RowSelectionState } from "@tanstack/react-table";
 import { ChangeEvent } from "react";
 
 export default interface ActionBarProps {
@@ -23,6 +23,6 @@ export default interface ActionBarProps {
   openDeselectAll: boolean;
   setOpenExport: (open: boolean) => void;
   openExport: boolean;
-  setRowSelection: (rowSelection: object) => void;
+  setRowSelection: (rowSelection: RowSelectionState) => void;
   columnFilters: ColumnFiltersState;
 }

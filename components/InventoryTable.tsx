@@ -3,12 +3,8 @@
 import {
   ColumnFiltersState,
   SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  RowSelectionState,
+  useTable,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -23,7 +19,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Ducats from "../public/images/Ducats.png";
 import Credits from "../public/images/Credits.png";
-import { columns, tableDef } from "./ColumnDef";
+import { columns, features, tableDef } from "./ColumnDef";
 import InventoryPagination from "./InventoryPagination";
 import InventoryTableProps from "@/interfaces/InventoryTableProps";
 import ActionBar from "./ActionBar";
@@ -40,7 +36,7 @@ const InventoryTable = (props: InventoryTableProps) => {
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const [ducats, setDucats] = useState<number>(0);
   const [credits, setCredits] = useState<number>(0);
@@ -50,15 +46,12 @@ const InventoryTable = (props: InventoryTableProps) => {
 
   const { inventoryData, error } = useInventoryData();
 
-  const table: tableDef = useReactTable({
+  const table: tableDef = useTable({
+    features,
     data: inventoryData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
     enableColumnFilters: true,
     state: {
@@ -107,7 +100,7 @@ const InventoryTable = (props: InventoryTableProps) => {
     if (props.acceptedToast) {
       const savedSelection = window.localStorage.getItem("rowSelection");
       if (savedSelection) {
-        const deserialized = JSON.parse(savedSelection) as object;
+        const deserialized = JSON.parse(savedSelection) as RowSelectionState;
         setRowSelection(deserialized);
         setTimeout(() => {
           const selectedRows = table
@@ -215,10 +208,7 @@ const InventoryTable = (props: InventoryTableProps) => {
                     <TableHead key={`${header.id}-${index}`}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : <table.FlexRender header={header} />}
                     </TableHead>
                   );
                 })}
@@ -234,10 +224,7 @@ const InventoryTable = (props: InventoryTableProps) => {
                 >
                   {row.getVisibleCells().map((cell, index) => (
                     <TableCell key={`${cell.id}-${index}`}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      <table.FlexRender cell={cell} />
                     </TableCell>
                   ))}
                 </TableRow>

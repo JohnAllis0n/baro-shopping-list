@@ -1,6 +1,24 @@
 "use client";
 
-import { ColumnDef, SortDirection, Table } from "@tanstack/react-table";
+import {
+  ColumnDef,
+  ReactTable,
+  SortDirection,
+  columnFilteringFeature,
+  columnVisibilityFeature,
+  createFilteredRowModel,
+  createPaginatedRowModel,
+  createSortedRowModel,
+  filterFn_includesString,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  sortFn_alphanumeric,
+  sortFn_basic,
+  sortFn_datetime,
+  sortFn_text,
+  tableFeatures,
+} from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -38,7 +56,27 @@ export const getSortedDatesDecending = (
   return allDates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 };
 
-export const columns: ColumnDef<BaseItem>[] = [
+export const features = tableFeatures({
+  columnFilteringFeature,
+  columnVisibilityFeature,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  filteredRowModel: createFilteredRowModel(),
+  sortedRowModel: createSortedRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+  filterFns: { includesString: filterFn_includesString },
+  sortFns: {
+    alphanumeric: sortFn_alphanumeric,
+    basic: sortFn_basic,
+    datetime: sortFn_datetime,
+    text: sortFn_text,
+  },
+});
+
+export type InventoryFeatures = typeof features;
+
+export const columns: ColumnDef<InventoryFeatures, BaseItem>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -62,7 +100,6 @@ export const columns: ColumnDef<BaseItem>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
-    enableResizing: false,
   },
   {
     accessorKey: "name",
@@ -94,7 +131,6 @@ export const columns: ColumnDef<BaseItem>[] = [
         </p>
       </Link>
     ),
-    enableResizing: false,
   },
   {
     accessorKey: "ducats",
@@ -375,15 +411,4 @@ export const columns: ColumnDef<BaseItem>[] = [
   },
 ];
 
-export type tableDef = Table<{
-  name: string;
-  ducats: number;
-  credits: number;
-  link: string;
-  image: string;
-  itemType: InventoryType;
-  latestOfferingDate: string;
-  consoleOfferingDates: string[];
-  pCOfferingDates: string[];
-  offeringsDates: string[];
-}>;
+export type tableDef = ReactTable<InventoryFeatures, BaseItem>;
